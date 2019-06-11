@@ -7,6 +7,7 @@ import platform
 import re
 import sys
 import subprocess
+import time
 
 from functools import partial
 from collections import defaultdict
@@ -393,7 +394,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
         self.tools = self.toolbar('Tools')
         self.actions.beginner = (
-            retrieve_data, save, submit_label, changeSavedir, openNextImg, openPrevImg, verify, save_format, None, create, copy, delete, None,
+            retrieve_data, save, submit_label, openNextImg, openPrevImg, verify, save_format, None, create, copy, delete, None,
             zoomIn, zoom, zoomOut, fitWindow, fitWidth)
 
         self.actions.advanced = (
@@ -497,6 +498,7 @@ class MainWindow(QMainWindow, WindowMixin):
                 exit(0)
     
     def getData(self):
+        time.sleep(10)
         print('getData Called')
 
     def submitLabel(self):
