@@ -2,6 +2,8 @@
 <qresource>
 
 <file alias="help">resources/icons/help.png</file>
+<file alias="download">resources/icons/download.png</file>
+<file alias="logo">resources/icons/logo.jpg</file>
 <file alias="app">resources/icons/app.png</file>
 <file alias="expert">resources/icons/expert2.png</file>
 <file alias="done">resources/icons/done.png</file>
@@ -32,7 +34,5 @@
 <file alias="resetall">resources/icons/resetall.png</file>
 <file alias="verify">resources/icons/verify.png</file>
 <file alias="strings">resources/strings/strings.properties</file>
-<file alias="strings-zh-TW">resources/strings/strings-zh-TW.properties</file>
-<file alias="strings-zh-CN">resources/strings/strings-zh-CN.properties</file>
 </qresource>
 </RCC>

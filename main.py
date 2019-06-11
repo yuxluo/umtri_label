@@ -45,7 +45,7 @@ from libs.yolo_io import TXT_EXT
 from libs.ustr import ustr
 from libs.hashableQListWidgetItem import HashableQListWidgetItem
 
-__appname__ = 'labelImg'
+__appname__ = 'UMTRI Image Annotation Tool'
 
 class WindowMixin(object):
 
@@ -72,7 +72,7 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None, defaultPrefdefClassFile=None, defaultSaveDir=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
-
+        self.init_prompt()
         # Load setting in the main thread
         self.settings = Settings()
         self.settings.load()
@@ -200,11 +200,13 @@ class MainWindow(QMainWindow, WindowMixin):
         open = action(getStr('openFile'), self.openFile,
                       'Ctrl+O', 'open', getStr('openFileDetail'))
 
+        retrieve_data = action(getStr('getData'), self.getData, 'Ctrl+r', 'download', getStr('getData'))
+
         opendir = action(getStr('openDir'), self.openDirDialog,
                          'Ctrl+u', 'open', getStr('openDir'))
 
         changeSavedir = action(getStr('changeSaveDir'), self.changeSavedirDialog,
-                               'Ctrl+r', 'open', getStr('changeSavedAnnotationDir'))
+                               'Ctrl+5', 'open', getStr('changeSavedAnnotationDir'))
 
         openAnnotation = action(getStr('openAnnotation'), self.openAnnotationDialog,
                                 'Ctrl+Shift+O', 'open', getStr('openAnnotationDetail'))
@@ -389,7 +391,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
         self.tools = self.toolbar('Tools')
         self.actions.beginner = (
-            open, opendir, changeSavedir, openNextImg, openPrevImg, verify, save, save_format, None, create, copy, delete, None,
+            retrieve_data, opendir, changeSavedir, openNextImg, openPrevImg, verify, save, save_format, None, create, copy, delete, None,
             zoomIn, zoom, zoomOut, fitWindow, fitWidth)
 
         self.actions.advanced = (
@@ -475,6 +477,26 @@ class MainWindow(QMainWindow, WindowMixin):
         # Open Dir if deafult file
         if self.filePath and os.path.isdir(self.filePath):
             self.openDirDialog(dirpath=self.filePath)
+
+    def init_prompt(self):
+        alert_box = QMessageBox.question(self, 'Welcome to UMTRI', "This software is adapted from LabelImg \n\nHave you been authorized to access the data?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if alert_box == QMessageBox.Yes:
+            print('Yes clicked.')
+        else:
+            print('No clicked.')
+            exit(0)
+
+        while(1):
+            secret, ok = QInputDialog.getText(self, 'Security Check', 'Please enter the passcode below' )
+            if ok: 
+                if secret == "GoBlue2901":
+                    break
+            else:
+                exit(0)
+    
+    def getData(self):
+        print('getData Called')
+
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Control:
@@ -1458,7 +1480,7 @@ def get_main_app(argv=[]):
     """
     app = QApplication(argv)
     app.setApplicationName(__appname__)
-    app.setWindowIcon(newIcon("app"))
+    app.setWindowIcon(newIcon("logo"))
     # Tzutalin 201705+: Accept extra agruments to change predefined class file
     # Usage : labelImg.py image predefClassFile saveDir
     win = MainWindow(argv[1] if len(argv) >= 2 else None,
