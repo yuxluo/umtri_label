@@ -72,7 +72,7 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None, defaultPrefdefClassFile=None, defaultSaveDir=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
-        self.init_prompt()
+        # self.init_prompt()
         # Load setting in the main thread
         self.settings = Settings()
         self.settings.load()
@@ -202,6 +202,8 @@ class MainWindow(QMainWindow, WindowMixin):
 
         retrieve_data = action(getStr('getData'), self.getData, 'Ctrl+r', 'download', getStr('getData'))
 
+        submit_label = action(getStr('submitLabel'), self.submitLabel, 'Ctrl+M', 'upload', getStr('submitLabel'))
+
         opendir = action(getStr('openDir'), self.openDirDialog,
                          'Ctrl+u', 'open', getStr('openDir'))
 
@@ -221,7 +223,7 @@ class MainWindow(QMainWindow, WindowMixin):
                         'space', 'verify', getStr('verifyImgDetail'))
 
         save = action(getStr('save'), self.saveFile,
-                      'Ctrl+S', 'save', getStr('saveDetail'), enabled=False)
+                      'Ctrl+s', 'save', getStr('saveDetail'), enabled=False)
 
         save_format = action('&PascalVOC', self.change_format,
                       'Ctrl+', 'format_voc', getStr('changeSaveFormat'), enabled=True)
@@ -391,7 +393,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
         self.tools = self.toolbar('Tools')
         self.actions.beginner = (
-            retrieve_data, opendir, changeSavedir, openNextImg, openPrevImg, verify, save, save_format, None, create, copy, delete, None,
+            retrieve_data, save, submit_label, changeSavedir, openNextImg, openPrevImg, verify, save_format, None, create, copy, delete, None,
             zoomIn, zoom, zoomOut, fitWindow, fitWidth)
 
         self.actions.advanced = (
@@ -497,6 +499,8 @@ class MainWindow(QMainWindow, WindowMixin):
     def getData(self):
         print('getData Called')
 
+    def submitLabel(self):
+        print('submitLabel Called')
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Control:

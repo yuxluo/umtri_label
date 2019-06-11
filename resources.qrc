@@ -2,6 +2,7 @@
 <qresource>
 
 <file alias="help">resources/icons/help.png</file>
+<file alias="upload">resources/icons/upload.png</file>
 <file alias="download">resources/icons/download.png</file>
 <file alias="logo">resources/icons/logo.jpg</file>
 <file alias="app">resources/icons/app.png</file>
