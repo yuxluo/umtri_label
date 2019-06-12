@@ -78,12 +78,12 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None, defaultPrefdefClassFile=None, defaultSaveDir=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
-        self.init_prompt()
+        # self.init_prompt()
         # Load setting in the main thread
         self.settings = Settings()
         self.settings.load()
         settings = self.settings
-
+        self.progressBar = QProgressBar()
         # Load string bundle for i18n
         self.stringBundle = StringBundle.getBundle()
         getStr = lambda strId: self.stringBundle.getString(strId)
@@ -206,9 +206,9 @@ class MainWindow(QMainWindow, WindowMixin):
         open = action(getStr('openFile'), self.openFile,
                       'Ctrl+O', 'open', getStr('openFileDetail'))
 
-        retrieve_data = action(getStr('getData'), self.getData, 'Ctrl+r', 'download', getStr('getData'))
+        retrieve_data = action(getStr('getData'), self.getData, 'Ctrl+r', 'download', getStr('retrieveDetail'))
 
-        submit_label = action(getStr('submitLabel'), self.submitLabel, 'Ctrl+M', 'upload', getStr('submitLabel'))
+        submit_label = action(getStr('submitLabel'), self.submitLabel, 'Ctrl+M', 'upload', getStr('submitDetail'))
 
         opendir = action(getStr('openDir'), self.openDirDialog,
                          'Ctrl+u', 'open', getStr('openDir'))
@@ -511,13 +511,23 @@ class MainWindow(QMainWindow, WindowMixin):
             USERNAME = server_info.split()[1]
             PASSWORD = server_info.split()[2]
 
+    
+
+    def progress(self, filename, size, sent):
+        self.progressBar.setValue(float(sent)/float(size) * 100)
+
     def getData(self):
         print('getData Called')
+        self.statusBar().addPermanentWidget(self.progressBar)
+        self.statusBar().showMessage("Retrieving data set...")
+        self.statusBar().show()
 
         #connect to the data server through ssh 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(HOST, username=USERNAME, password=PASSWORD)
+
+
 
         # get the name of the first file
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('cd unlabeled/; ls | head -n 1') 
@@ -532,8 +542,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
         # get data and label from server through scp
         data_folder_path = os.path.dirname(os.path.realpath(__file__)) + '/data/'
-  
-        scp = SCPClient(ssh.get_transport())
+        scp = SCPClient(ssh.get_transport(), progress = self.progress)
         scp.get('~/predefined_classes.txt', data_folder_path)
         scp.get('~/labeled/' + pending_retrieval, data_folder_path)
         
@@ -541,6 +550,7 @@ class MainWindow(QMainWindow, WindowMixin):
         os.system('unzip ' + data_folder_path + pending_retrieval + ' -d ' + data_folder_path)
         os.system('rm ' + data_folder_path + pending_retrieval)
         
+        #open the folder in umtri_label
         folder_name = str()
         for letter in pending_retrieval:
             if letter == '.':
@@ -551,6 +561,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
         ssh.close()
         print("server connection closed")
+        self.statusBar().removeWidget(self.progressBar)
 
 
 
@@ -1547,6 +1558,8 @@ def get_main_app(argv=[]):
                          os.path.dirname(sys.argv[0]),
                          'data', 'predefined_classes.txt'),
                      argv[3] if len(argv) >= 4 else None)
+    
+    win.setGeometry(100, 100, 1280, 720)
     win.show()
     return app, win
 
