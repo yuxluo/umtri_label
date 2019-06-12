@@ -495,21 +495,21 @@ class MainWindow(QMainWindow, WindowMixin):
             exit(0)
 
         while(1):
-            secret, ok = QInputDialog.getText(self, 'Security Check', 'Please enter the passcode below' )
+            secret, ok = QInputDialog.getText(self, 'Authentication', 'Please enter the passcode below' )
             if ok: 
                 if secret == "GoBlue2901":
                     break
             else:
                 exit(0)
     
-            server_info, ok = QInputDialog.getText(self, 'Server Info', 'Please enter the server info below \n(ip username password) leave blank to use default' )
-            if ok: 
-                if server_info == "":
-                    break
-            else:
-                HOST = server_info.split()[0]
-                USERNAME = server_info.split()[1]
-                PASSWORD = server_info.split()[2]
+        server_info, ok = QInputDialog.getText(self, 'Server Info', 'Please enter the server info below (ip username password) \nleave blank to use default' )
+        if ok: 
+            if server_info == "":
+                pass
+        else:
+            HOST = server_info.split()[0]
+            USERNAME = server_info.split()[1]
+            PASSWORD = server_info.split()[2]
 
     def getData(self):
         print('getData Called')
