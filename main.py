@@ -529,7 +529,7 @@ class MainWindow(QMainWindow, WindowMixin):
         scp.get('~/labeled/' + pending_retrieval, data_folder_path)
         
         # unpack pictures and remove zip
-        os.system('unzip ' + data_folder_path + pending_retrieval)
+        os.system('unzip ' + data_folder_path + pending_retrieval + ' -d ' + data_folder_path)
         os.system('rm ' + data_folder_path + pending_retrieval)
         
 
