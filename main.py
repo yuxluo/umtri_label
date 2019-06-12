@@ -8,6 +8,7 @@ import re
 import sys
 import subprocess
 import time
+import paramiko
 
 from functools import partial
 from collections import defaultdict
@@ -226,7 +227,7 @@ class MainWindow(QMainWindow, WindowMixin):
         save = action(getStr('save'), self.saveFile,
                       'Ctrl+s', 'save', getStr('saveDetail'), enabled=False)
 
-        save_format = action('&PascalVOC', self.change_format,
+        save_format = action('&XML', self.change_format,
                       'Ctrl+', 'format_voc', getStr('changeSaveFormat'), enabled=True)
 
         saveAs = action(getStr('saveAs'), self.saveFileAs,
@@ -498,8 +499,9 @@ class MainWindow(QMainWindow, WindowMixin):
                 exit(0)
     
     def getData(self):
-        time.sleep(10)
         print('getData Called')
+        ssh = paramiko.SSHClient()
+        
 
     def submitLabel(self):
         print('submitLabel Called')

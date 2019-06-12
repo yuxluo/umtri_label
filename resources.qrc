@@ -1,6 +1,6 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-
+<file alias="xml">resources/icons/xml.png</file>
 <file alias="help">resources/icons/help.png</file>
 <file alias="upload">resources/icons/upload.png</file>
 <file alias="download">resources/icons/download.png</file>
