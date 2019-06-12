@@ -83,7 +83,7 @@ class MainWindow(QMainWindow, WindowMixin):
         self.settings = Settings()
         self.settings.load()
         settings = self.settings
-        self.progressBar = QProgressBar()
+
         # Load string bundle for i18n
         self.stringBundle = StringBundle.getBundle()
         getStr = lambda strId: self.stringBundle.getString(strId)
@@ -514,10 +514,16 @@ class MainWindow(QMainWindow, WindowMixin):
     
 
     def progress(self, filename, size, sent):
-        self.progressBar.setValue(float(sent)/float(size) * 100)
+        progress = float(sent)/float(size) * 100
+        if progress != 100:
+            self.progressBar.setValue(progress)
+
+        
 
     def getData(self):
         print('getData Called')
+        self.progressBar = QProgressBar()
+        self.progressBar.setValue(0)
         self.statusBar().addPermanentWidget(self.progressBar)
         self.statusBar().showMessage("Retrieving data set...")
         self.statusBar().show()
