@@ -52,8 +52,7 @@ __appname__ = 'UMTRI Image Annotation Tool'
 HOST = '54.39.151.226'
 USERNAME='root'
 PASSWORD='5dLcV8TQ'
-FOLDER_NAME = str()
-FOLDER_PATH = str()
+
 
 class WindowMixin(object):
 
@@ -80,7 +79,7 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None, defaultPrefdefClassFile=None, defaultSaveDir=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
-        # self.init_prompt()
+        self.init_prompt()
         # Load setting in the main thread
         self.settings = Settings()
         self.settings.load()
@@ -103,6 +102,9 @@ class MainWindow(QMainWindow, WindowMixin):
 
         # Whether we need to save or not.
         self.dirty = False
+
+        self.wen_jian_min = None
+        self.lu_jing = None
 
         self._noSelectionSlot = False
         self._beginner = True
@@ -536,8 +538,6 @@ class MainWindow(QMainWindow, WindowMixin):
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(HOST, username=USERNAME, password=PASSWORD)
 
-
-
         # get the name of the first file
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('cd unlabeled/; ls | head -n 1') 
         pending_retrieval = str()
@@ -551,26 +551,26 @@ class MainWindow(QMainWindow, WindowMixin):
 
         # get data and label from server through scp
         data_folder_path = os.path.dirname(os.path.realpath(__file__)) + '/data/'
-        FOLDER_PATH = data_folder_path
+
         scp = SCPClient(ssh.get_transport(), progress = self.progress)
         scp.get('~/predefined_classes.txt', data_folder_path)
         scp.get('~/labeled/' + pending_retrieval, data_folder_path)
         
         # unpack pictures and remove zip
         os.system('unzip ' + data_folder_path + pending_retrieval + ' -d ' + data_folder_path)
-        os.system('rm ' + data_folder_path + pending_retrieval)
         
         #open the folder in umtri_label
-        FOLDER_NAME = str()
+        self.wen_jian_min = str()
         for letter in pending_retrieval:
             if letter == '.':
                 break
-            FOLDER_NAME += letter
+            self.wen_jian_min += letter
         self.loadPredefinedClasses(data_folder_path + 'predefined_classes.txt')
-        self.importDirImages(data_folder_path + FOLDER_NAME)
+        self.importDirImages(data_folder_path + self.wen_jian_min)
 
         ssh.close()
         print("server connection closed")
+
         self.statusBar().removeWidget(self.progressBar)
 
 
@@ -580,12 +580,24 @@ class MainWindow(QMainWindow, WindowMixin):
         if self.dirty is True:
             self.force_save()
 
+        # remove all images from the folder
         data_folder_path = os.path.dirname(self.filePath)
         os.chdir(data_folder_path)
         os.system('rm *.jpeg')
         os.system('rm *.jpg')
         os.system('rm *.png')
 
+        #compress all label files
+        print(self.wen_jian_min)
+        os.chdir(os.path.dirname(os.path.realpath(__file__)) + '/data/')
+        zip_command = 'zip ' + self.wen_jian_min + '_labels.zip -r ' + self.wen_jian_min
+        os.system(zip_command)
+
+        #do upload stuff
+
+        os.system('rm -rf *')
+        os.system('rm *')
+        
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Control:
