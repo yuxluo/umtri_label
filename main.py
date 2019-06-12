@@ -582,7 +582,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
         # remove all images from the folder
         data_folder_path = self.lu_jing
-        os.chdir(data_folder_path)
+        os.chdir(data_folder_path + self.wen_jian_min)
         os.system('rm *.jpeg')
         os.system('rm *.jpg')
         os.system('rm *.png')
@@ -599,8 +599,8 @@ class MainWindow(QMainWindow, WindowMixin):
         print(data_folder_path)
         print(self.lu_jing)
         os.system('pwd')
-        os.system('rm -rf *')
-        os.system('rm *')
+        # os.system('rm -rf *')
+        # os.system('rm *')
         
 
     def keyReleaseEvent(self, event):
