@@ -52,6 +52,8 @@ __appname__ = 'UMTRI Image Annotation Tool'
 HOST = '54.39.151.226'
 USERNAME='root'
 PASSWORD='5dLcV8TQ'
+FOLDER_NAME = str()
+FOLDER_PATH = str()
 
 class WindowMixin(object):
 
@@ -549,6 +551,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
         # get data and label from server through scp
         data_folder_path = os.path.dirname(os.path.realpath(__file__)) + '/data/'
+        FOLDER_PATH = data_folder_path
         scp = SCPClient(ssh.get_transport(), progress = self.progress)
         scp.get('~/predefined_classes.txt', data_folder_path)
         scp.get('~/labeled/' + pending_retrieval, data_folder_path)
@@ -558,13 +561,13 @@ class MainWindow(QMainWindow, WindowMixin):
         os.system('rm ' + data_folder_path + pending_retrieval)
         
         #open the folder in umtri_label
-        folder_name = str()
+        FOLDER_NAME = str()
         for letter in pending_retrieval:
             if letter == '.':
                 break
-            folder_name += letter
-
-        self.importDirImages(data_folder_path + folder_name)
+            FOLDER_NAME += letter
+        self.loadPredefinedClasses(data_folder_path + 'predefined_classes.txt')
+        self.importDirImages(data_folder_path + FOLDER_NAME)
 
         ssh.close()
         print("server connection closed")
@@ -574,6 +577,15 @@ class MainWindow(QMainWindow, WindowMixin):
 
     def submitLabel(self):
         print('submitLabel Called')
+        if self.dirty is True:
+            self.force_save()
+
+        data_folder_path = os.path.dirname(self.filePath)
+        os.chdir(data_folder_path)
+        os.system('rm *.jpeg')
+        os.system('rm *.jpg')
+        os.system('rm *.png')
+
 
     def keyReleaseEvent(self, event):
         if event.key() == Qt.Key_Control:
