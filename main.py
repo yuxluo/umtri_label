@@ -596,11 +596,9 @@ class MainWindow(QMainWindow, WindowMixin):
         #do upload stuff
 
         #clean up
-        print(data_folder_path)
-        print(self.lu_jing)
-        os.system('pwd')
         os.system('rm -rf *')
         os.system('rm *')
+        print('Submit Succeeded')
         
 
     def keyReleaseEvent(self, event):
