@@ -78,7 +78,7 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None, defaultPrefdefClassFile=None, defaultSaveDir=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
-        # self.init_prompt()
+        self.init_prompt()
         # Load setting in the main thread
         self.settings = Settings()
         self.settings.load()
@@ -502,6 +502,15 @@ class MainWindow(QMainWindow, WindowMixin):
             else:
                 exit(0)
     
+            server_info, ok = QInputDialog.getText(self, 'Server Info', 'Please enter the server info below \n(ip username password) leave blank to use default' )
+            if ok: 
+                if server_info == "":
+                    break
+            else:
+                HOST = server_info.split()[0]
+                USERNAME = server_info.split()[1]
+                PASSWORD = server_info.split()[2]
+
     def getData(self):
         print('getData Called')
 
@@ -532,6 +541,13 @@ class MainWindow(QMainWindow, WindowMixin):
         os.system('unzip ' + data_folder_path + pending_retrieval + ' -d ' + data_folder_path)
         os.system('rm ' + data_folder_path + pending_retrieval)
         
+        folder_name = str()
+        for letter in pending_retrieval:
+            if letter == '.':
+                break
+            folder_name += letter
+
+        self.importDirImages(data_folder_path + folder_name)
 
         ssh.close()
         print("server connection closed")
