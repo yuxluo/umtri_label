@@ -104,7 +104,7 @@ class MainWindow(QMainWindow, WindowMixin):
         self.dirty = False
 
         self.wen_jian_min = None
-        self.lu_jing = None
+        self.lu_jing = os.path.dirname(os.path.realpath(__file__)) + '/data/'
 
         self._noSelectionSlot = False
         self._beginner = True
@@ -550,7 +550,7 @@ class MainWindow(QMainWindow, WindowMixin):
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(mov_command)
 
         # get data and label from server through scp
-        data_folder_path = os.path.dirname(os.path.realpath(__file__)) + '/data/'
+        data_folder_path = self.lu_jing
 
         scp = SCPClient(ssh.get_transport(), progress = self.progress)
         scp.get('~/predefined_classes.txt', data_folder_path)
@@ -581,7 +581,7 @@ class MainWindow(QMainWindow, WindowMixin):
             self.force_save()
 
         # remove all images from the folder
-        data_folder_path = os.path.dirname(self.filePath)
+        data_folder_path = self.lu_jing
         os.chdir(data_folder_path)
         os.system('rm *.jpeg')
         os.system('rm *.jpg')
@@ -589,12 +589,16 @@ class MainWindow(QMainWindow, WindowMixin):
 
         #compress all label files
         print(self.wen_jian_min)
-        os.chdir(os.path.dirname(os.path.realpath(__file__)) + '/data/')
+        os.chdir('..')
         zip_command = 'zip ' + self.wen_jian_min + '_labels.zip -r ' + self.wen_jian_min
         os.system(zip_command)
 
         #do upload stuff
 
+        #clean up
+        print(data_folder_path)
+        print(self.lu_jing)
+        os.system('pwd')
         os.system('rm -rf *')
         os.system('rm *')
         
