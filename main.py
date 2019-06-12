@@ -9,6 +9,7 @@ import sys
 import subprocess
 import time
 import paramiko
+from scp import SCPClient
 
 from functools import partial
 from collections import defaultdict
@@ -48,6 +49,9 @@ from libs.ustr import ustr
 from libs.hashableQListWidgetItem import HashableQListWidgetItem
 
 __appname__ = 'UMTRI Image Annotation Tool'
+HOST = '54.39.151.226'
+USERNAME='root'
+PASSWORD='5dLcV8TQ'
 
 class WindowMixin(object):
 
@@ -499,25 +503,35 @@ class MainWindow(QMainWindow, WindowMixin):
                 exit(0)
     
     def getData(self):
-        #connect to the data server through ssh 
         print('getData Called')
+
+        #connect to the data server through ssh 
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect('54.39.151.226', username='root', password='5dLcV8TQ')
+        ssh.connect(HOST, username=USERNAME, password=PASSWORD)
 
-        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('cd unlabeled/; ls | head -n 1') # get the name of the first file
+        # get the name of the first file
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('cd unlabeled/; ls | head -n 1') 
         pending_retrieval = str()
         for letter in ssh_stdout.readlines()[0]:
-            print(letter)
-        print('end')
+            if (letter != '\n'):
+                pending_retrieval += letter
 
-        # pending_retrieval.strip('\n') #get rid of new line character
-        # print(pending_retrieval)
-        # mov_command = 'mv unlabeled/'+pending_retrieval+' labeled/'
+        # move top file to labeled folder
+        mov_command = 'mv unlabeled/'+pending_retrieval+' labeled/'
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(mov_command)
+
+        # get data and label from server through scp
+        data_folder_path = os.path.dirname(os.path.realpath(__file__)) + '/data/'
+  
+        scp = SCPClient(ssh.get_transport())
+        scp.get('~/predefined_classes.txt', data_folder_path)
+        scp.get('~/labeled/' + pending_retrieval, data_folder_path)
         
-        # print(mov_command)
-        # ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(mov_command)
-
+        # unpack pictures and remove zip
+        os.system('unzip ' + data_folder_path + pending_retrieval)
+        os.system('rm ' + data_folder_path + pending_retrieval)
+        
 
         ssh.close()
         print("server connection closed")
