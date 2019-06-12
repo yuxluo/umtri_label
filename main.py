@@ -499,9 +499,30 @@ class MainWindow(QMainWindow, WindowMixin):
                 exit(0)
     
     def getData(self):
+        #connect to the data server through ssh 
         print('getData Called')
         ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect('54.39.151.226', username='root', password='5dLcV8TQ')
+
+        ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('cd unlabeled/; ls | head -n 1') # get the name of the first file
+        pending_retrieval = str()
+        for letter in ssh_stdout.readlines()[0]:
+            print(letter)
+        print('end')
+
+        # pending_retrieval.strip('\n') #get rid of new line character
+        # print(pending_retrieval)
+        # mov_command = 'mv unlabeled/'+pending_retrieval+' labeled/'
         
+        # print(mov_command)
+        # ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(mov_command)
+
+
+        ssh.close()
+        print("server connection closed")
+
+
 
     def submitLabel(self):
         print('submitLabel Called')
