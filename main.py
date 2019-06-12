@@ -599,8 +599,8 @@ class MainWindow(QMainWindow, WindowMixin):
         print(data_folder_path)
         print(self.lu_jing)
         os.system('pwd')
-        # os.system('rm -rf *')
-        # os.system('rm *')
+        os.system('rm -rf *')
+        os.system('rm *')
         
 
     def keyReleaseEvent(self, event):
