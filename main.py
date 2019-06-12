@@ -78,7 +78,7 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None, defaultPrefdefClassFile=None, defaultSaveDir=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
-        # self.init_prompt()
+        self.init_prompt()
         # Load setting in the main thread
         self.settings = Settings()
         self.settings.load()
@@ -487,7 +487,7 @@ class MainWindow(QMainWindow, WindowMixin):
             self.openDirDialog(dirpath=self.filePath)
 
     def init_prompt(self):
-        alert_box = QMessageBox.question(self, 'Welcome to UMTRI', "This software is adapted from LabelImg \n\nHave you been authorized to access the data?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        alert_box = QMessageBox.question(self, '⚠⚠ 免責聲明 :::: DISCLAIMER ⚠⚠', "The UMTRI Image Annotation Tool is provided by Shaun Luo as is and with all faults. Shaun Luo makes no representations or warranties of any kind concerning the stability, suitability, lack of viruses, inaccuracies, typographical errors, or other harmful components of this software. You are solely responsible for the protection of your OS and backup of your data. Shaun Luo will not be liable for any damages you may suffer in connection with using, modifying, or distributing this software.\n\nClick 'Yes' to contiune at your own risk:", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if alert_box == QMessageBox.Yes:
             print('Yes clicked.')
         else:
