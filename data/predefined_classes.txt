@@ -1,4 +1,0 @@
-face
-arm
-leg
-pedestrian
