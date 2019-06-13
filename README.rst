@@ -1,4 +1,4 @@
-LabelImg
+UMTRI Image Annotation Tool
 ========
 
 .. image:: https://img.shields.io/pypi/v/labelimg.svg
@@ -7,7 +7,7 @@ LabelImg
 .. image:: https://img.shields.io/travis/tzutalin/labelImg.svg
         :target: https://travis-ci.org/tzutalin/labelImg
 
-.. image:: /resources/icons/app.png
+.. image:: /resources/icons/full_logo.png
     :width: 200px
     :align: center
 
