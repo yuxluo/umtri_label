@@ -526,7 +526,6 @@ class MainWindow(QMainWindow, WindowMixin):
         
 
     def getData(self):
-        print('getData Called')
         self.progressBar = QProgressBar()
         self.progressBar.setValue(0)
         self.statusBar().addPermanentWidget(self.progressBar)
@@ -534,27 +533,49 @@ class MainWindow(QMainWindow, WindowMixin):
         self.statusBar().show()
 
         #connect to the data server through ssh 
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(HOST, username=USERNAME, password=PASSWORD)
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(HOST, username=USERNAME, password=PASSWORD)
+        except:
+            alert_box = QMessageBox.warning(self, 'Request Failed Successfully', "The action was not performed correctly because: \n\nThe file server appears to be offline.", QMessageBox.Ok)
+            return
 
         # get the name of the first file
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('cd unlabeled/; ls | head -n 1') 
+
+        if ssh_stderr.readlines() != []:
+            alert_box = QMessageBox.warning(self, 'Request Failed Successfully', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
+            return
+
         pending_retrieval = str()
-        for letter in ssh_stdout.readlines()[0]:
-            if (letter != '\n'):
-                pending_retrieval += letter
+        try:
+            for letter in ssh_stdout.readlines()[0]:
+                if (letter != '\n'):
+                    pending_retrieval += letter
+                else:
+                    break
+        except:
+            alert_box = QMessageBox.warning(self, 'Request Failed Successfully', "The action was not performed correctly because: \n\nThe unlabeled folder appears to be empty on the server.", QMessageBox.Ok)
+            return
 
         # move top file to labeled folder
         mov_command = 'mv unlabeled/'+pending_retrieval+' labeled/'
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(mov_command)
+        if ssh_stderr.readlines() != []:
+            alert_box = QMessageBox.warning(self, 'Request Failed Successfully', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
+            return
 
         # get data and label from server through scp
         data_folder_path = self.lu_jing
 
-        scp = SCPClient(ssh.get_transport(), progress = self.progress)
-        scp.get('~/predefined_classes.txt', data_folder_path)
-        scp.get('~/labeled/' + pending_retrieval, data_folder_path)
+        try:
+            scp = SCPClient(ssh.get_transport(), progress = self.progress)
+            scp.get('~/predefined_classes.txt', data_folder_path)
+            scp.get('~/labeled/' + pending_retrieval, data_folder_path)
+        except:
+            alert_box = QMessageBox.warning(self, 'Request Failed Successfully', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
+            return
         
         # unpack pictures and remove zip
         os.system('unzip ' + data_folder_path + pending_retrieval + ' -d ' + data_folder_path)
@@ -569,14 +590,11 @@ class MainWindow(QMainWindow, WindowMixin):
         self.importDirImages(data_folder_path + self.wen_jian_min)
 
         ssh.close()
-        print("server connection closed")
-
         self.statusBar().removeWidget(self.progressBar)
 
 
 
     def submitLabel(self):
-        print('submitLabel Called')
         if self.dirty is True:
             self.force_save()
 
@@ -588,17 +606,15 @@ class MainWindow(QMainWindow, WindowMixin):
         os.system('rm *.png')
 
         #compress all label files
-        print(self.wen_jian_min)
         os.chdir('..')
         zip_command = 'zip ' + self.wen_jian_min + '_labels.zip -r ' + self.wen_jian_min
         os.system(zip_command)
 
-        #do upload stuff
+        #do upload stuff here
 
         #clean up
         os.system('rm -rf *')
         os.system('rm *')
-        print('Submit Succeeded')
         
 
     def keyReleaseEvent(self, event):
