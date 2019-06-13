@@ -23,7 +23,7 @@ by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO for
 
 ATTENTION
 ------------------
-Only Ubuntu, Debian and Deepin are officially supported at this moment. Binaries for macOS and Windows is scheduled to be released at a later date. 
+Only Linux(Ubuntu, Debian, Deepin) and macOS are officially supported at this moment. Binaries for macOS and Windows is scheduled to be released at a later date. 
 
 
 Configuration
