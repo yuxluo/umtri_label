@@ -50,162 +50,32 @@ The Client
 
     git clone https://github.com/yuxluo/umtri_label.git
 
-• Install prerequisites (may require root previlege)
+• Install prerequisites (including pip3, pyqt5, pyqt5-dev-tools, lxml, paramiko, scp. This action may require root previlege)
 .. code:: shell
 
-    ./install 
+    ./install.sh
 
-macOS
-^^^^^
-Python 2 + Qt4
-
+• make and run 
 .. code:: shell
 
-    brew install qt qt4
-    brew install libxml2
-    make qt4py2
-    python labelImg.py
-    python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
-
-Python 3 + Qt5 (Recommended)
-
-.. code:: shell
-
-    brew install qt  # Install qt-5.x.x by Homebrew
-    brew install libxml2
-
-    or using pip
-
-    pip3 install pyqt5 lxml # Install qt and lxml by pip
-
-    make qt5py3
-    python3 labelImg.py
-    python3 labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
-
-
-Python 3 Virtualenv (Recommended)
-
-Virtualenv can avoid a lot of the QT / Python version issues
-
-.. code:: shell
-
-    brew install python3
-    pip3 install pipenv
-    pipenv --three # or pipenv install pyqt5 lxml
-    pipenv run pip install pyqt5 lxml
-    pipenv run make qt5py3
-    python3 labelImg.py
-    [Optional] rm -rf build dist; python setup.py py2app -A;mv "dist/labelImg.app" /Applications
-
-Note: The Last command gives you a nice .app file with a new SVG Icon in your /Applications folder. You can consider using the script: build-tools/build-for-macos.sh
-
-
-Windows
-^^^^^^^
-
-Install `Python <https://www.python.org/downloads/windows/>`__,
-`PyQt5 <https://www.riverbankcomputing.com/software/pyqt/download5>`__
-and `install lxml <http://lxml.de/installation.html>`__.
-
-Open cmd and go to the `labelImg <#labelimg>`__ directory
-
-.. code:: shell
-
-    pyrcc4 -o line/resources.py resources.qrc
-    For pyqt5, pyrcc5 -o libs/resources.py resources qrc
-    
-    python labelImg.py
-    python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
-
-Windows + Anaconda
-^^^^^^^^^^^^^^^^^^
-
-Download and install `Anaconda <https://www.anaconda.com/download/#download>`__ (Python 3+)
-
-Open the Anaconda Prompt and go to the `labelImg <#labelimg>`__ directory
-
-.. code:: shell
-
-    conda install pyqt=5
-    pyrcc5 -o libs/resources.py resources.qrc
-    python labelImg.py
-    python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
-
-Get from PyPI but only python3.0 or above
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. code:: shell
-
-    pip3 install labelImg
-    labelImg
-    labelImg [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
-
-
-Use Docker
-~~~~~~~~~~~~~~~~~
-.. code:: shell
-
-    docker run -it \
-    --user $(id -u) \
-    -e DISPLAY=unix$DISPLAY \
-    --workdir=$(pwd) \
-    --volume="/home/$USER:/home/$USER" \
-    --volume="/etc/group:/etc/group:ro" \
-    --volume="/etc/passwd:/etc/passwd:ro" \
-    --volume="/etc/shadow:/etc/shadow:ro" \
-    --volume="/etc/sudoers.d:/etc/sudoers.d:ro" \
-    -v /tmp/.X11-unix:/tmp/.X11-unix \
-    tzutalin/py2qt4
-
-    make qt4py2;./labelImg.py
-
-You can pull the image which has all of the installed and required dependencies. `Watch a demo video <https://youtu.be/nw1GexJzbCI>`__
-
+    ./run.sh
 
 Usage
 -----
 
-Steps (PascalVOC)
-~~~~~~~~~~~~~~~~~
-
-1. Build and launch using the instructions above.
-2. Click 'Change default saved annotation folder' in Menu/File
-3. Click 'Open Dir'
+1. Build and launch using the instructions above
+2. Enter your access code and server information. Ask the project instructor if you are not sure
+3. Click 'Retrieve'
 4. Click 'Create RectBox'
-5. Click and release left mouse to select a region to annotate the rect
-   box
-6. You can use right mouse to drag the rect box to copy or move it
+5. Click and release left mouse to select a region to annotate the rect box
+6. Click 'Next' and repeat step 4 until reaching the end of the datase 
+7. Click 'Submit'
+8. Repeat step 3.
 
-The annotation will be saved to the folder you specify.
+The annotation will be saved automatically when you click next or sumbit
 
 You can refer to the below hotkeys to speed up your workflow.
 
-Steps (YOLO)
-~~~~~~~~~~~~
-
-1. In ``data/predefined_classes.txt`` define the list of classes that will be used for your training.
-
-2. Build and launch using the instructions above.
-
-3. Right below "Save" button in the toolbar, click "PascalVOC" button to switch to YOLO format.
-
-4. You may use Open/OpenDIR to process single or multiple images. When finished with a single image, click save.
-
-A txt file of YOLO format will be saved in the same folder as your image with same name. A file named "classes.txt" is saved to that folder too. "classes.txt" defines the list of class names that your YOLO label refers to.
-
-Note:
-
-- Your label list shall not change in the middle of processing a list of images. When you save an image, classes.txt will also get updated, while previous annotations will not be updated.
-
-- You shouldn't use "default class" function when saving to YOLO format, it will not be referred.
-
-- When saving as YOLO format, "difficult" flag is discarded.
-
-Create pre-defined classes
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can edit the
-`data/predefined\_classes.txt <https://github.com/tzutalin/labelImg/blob/master/data/predefined_classes.txt>`__
-to load pre-defined classes
 
 Hotkeys
 ~~~~~~~
@@ -246,25 +116,8 @@ This is used when creating a dataset automatically, the user can then through al
 The difficult field is set to 1 indicates that the object has been annotated as "difficult", for example, an object which is clearly visible but difficult to recognize without substantial use of context.
 According to your deep neural network implementation, you can include or exclude difficult objects during training.
 
-How to contribute
-~~~~~~~~~~~~~~~~~
-
-Send a pull request
-
 License
 ~~~~~~~
 `Free software: MIT license <https://github.com/tzutalin/labelImg/blob/master/LICENSE>`_
 
 Citation: Tzutalin. LabelImg. Git code (2015). https://github.com/tzutalin/labelImg
-
-Related
-~~~~~~~
-
-1. `ImageNet Utils <https://github.com/tzutalin/ImageNet_Utils>`__ to
-   download image, create a label text for machine learning, etc
-2. `Use Docker to run labelImg <https://hub.docker.com/r/tzutalin/py2qt4>`__
-3. `Generating the PASCAL VOC TFRecord files <https://github.com/tensorflow/models/blob/4f32535fe7040bb1e429ad0e3c948a492a89482d/research/object_detection/g3doc/preparing_inputs.md#generating-the-pascal-voc-tfrecord-files>`__
-4. `App Icon based on Icon by Nick Roach (GPL) <https://www.elegantthemes.com/>`__
-5. `Setup python development in vscode <https://tzutalin.blogspot.com/2019/04/set-up-visual-studio-code-for-python-in.html>`__
-
-
