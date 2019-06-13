@@ -58,7 +58,12 @@ The Client
 .. code:: shell
 
     ./install.sh
+    
+• or this if you are using a mac
+.. code:: shell
 
+    ./install_macOS.sh
+    
 • make and run 
 .. code:: shell
 
