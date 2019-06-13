@@ -26,48 +26,34 @@ Configuration
 ------------------
 The UMTRI Image Annotation Tool requires two components to work properly -- a server and a client
 
-Server
+The Server
 ~~~~~~~~~~~~~~~~~
-The server hosts the data sets to be labeled. Server infomation is entered during the client's startup. 
+• The server hosts the data sets to be labeled. Server infomation is entered during the client's startup. 
 
-The server must support SSH and SCP. 
+• The server must support SSH and SCP. 
 
-The server must contain a file called 'predefined_classes.txt' at the root directory. This text file contains predefined labels that the client will fetch. 
+• The server must contain a file called 'predefined_classes.txt' at the root directory. This text file contains predefined labels that the client will fetch. 
 
-The server must also contain two folders 'labeled' and 'unlabeled'
+• The server must also contain two folders 'labeled' and 'unlabeled'
 
-The .zip files of the data sets are placed in the unlabeled folder. 
+• The .zip files of the data sets are placed in the unlabeled folder. 
 
-The .zip files must be a folder of the same name when inflated and contains supported image files (jpg, jpeg, png） within this inflated folders.
-
-
-Linux/Ubuntu/Mac requires at least `Python
-2.6 <https://www.python.org/getit/>`__ and has been tested with `PyQt
-4.8 <https://www.riverbankcomputing.com/software/pyqt/intro>`__. However, `Python
-3 or above <https://www.python.org/getit/>`__ and  `PyQt5 <https://pypi.org/project/PyQt5/>`__ are strongly recommended.
+• The .zip files must be a folder of the same name when inflated and contains supported image files (jpg, jpeg, png） within this inflated folders.
 
 
-Ubuntu Linux
-^^^^^^^^^^^^
-Python 2 + Qt4
+The Client
+~~~~~~~~~~~~~~~~~
+• Ubuntu/Debian/Deepin requires python3 or above and PyQt5
 
+• Clone this repo.
 .. code:: shell
 
-    sudo apt-get install pyqt4-dev-tools
-    sudo pip install lxml
-    make qt4py2
-    python labelImg.py
-    python labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
+    git clone https://github.com/yuxluo/umtri_label.git
 
-Python 3 + Qt5 (Recommended)
-
+• Install prerequisites (may require root previlege)
 .. code:: shell
 
-    sudo apt-get install pyqt5-dev-tools
-    sudo pip3 install -r requirements/requirements-linux-python3.txt
-    make qt5py3
-    python3 labelImg.py
-    python3 labelImg.py [IMAGE_PATH] [PRE-DEFINED CLASS FILE]
+    ./install 
 
 macOS
 ^^^^^
