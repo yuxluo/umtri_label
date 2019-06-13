@@ -28,7 +28,8 @@ Only Ubuntu, Debian and Deepin are officially supported at this moment. Binaries
 
 Configuration
 ------------------
-The UMTRI Image Annotation Tool requires two components to work properly -- a server and a client
+The UMTRI Image Annotation Tool requires two components to work properly -- a server and a client。
+The client retrieves data sets hosted on the server and sends the labels back during submit
 
 The Server
 ~~~~~~~~~~~~~~~~~
