@@ -119,3 +119,35 @@ License
 `Free software: MIT license <https://github.com/tzutalin/labelImg/blob/master/LICENSE>`_
 
 Citation: Tzutalin. LabelImg. Git code (2015). https://github.com/tzutalin/labelImg
+
+Changelog
+-----
+Alpha 0.1
+~~~~~~~
+• This ReadMe page
+• logo and title bar
+• logo and title bar
+• Disclaimer
+• Authentication
+• Custom file server 
+• Modern and consistent icons
+• Progress bar
+• Retrieve function
+    move .zip to labeled 
+    download .zip from server
+    download predefined_classes
+    unzip
+    load folder and predefined_classes
+• Autosave when click next and Submit
+• Submit function
+    compress labels into zip 
+    upload labels to server 
+    local clean up 
+
+
+Future Features
+~~~~~~~
+• Hierarchy
+• Occluded check box
+• Gesture labeling
+• single-file executable for macOS and Windows
