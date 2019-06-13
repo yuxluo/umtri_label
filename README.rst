@@ -148,6 +148,7 @@ Alpha 0.1
 • Auto compress labels into zip 
 • Auto upload labels to server 
 • Auto local clean up 
+• Added preemptive checking in case unlabeled folder is empty or server unable to connect
 
 
 Future Features
