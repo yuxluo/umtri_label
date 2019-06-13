@@ -9,8 +9,8 @@ UMTRI Image Annotation Tool
         :target: https://travis-ci.org/tzutalin/labelImg
 
 .. image:: /resources/icons/full_logo.png
-    :width: 200px
     :align: center
+
 
 UMTRI Image Annotation Tool is adapted from LabelImg and is being developed and maintained by Shaun Luo. Special thanks to Tzutalin for his initial work. 
 
@@ -18,9 +18,19 @@ The UMTRI IAT is written in Python and uses PyQt5 for its GUI.
 Annotations are saved as XML files in PASCAL VOC format, the format used
 by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO format
 
+
 ATTENTION
 ------------------
 Only Ubuntu, Debian and Deepin are officially supported at this moment. Binaries for macOS and Windows is scheduled to be released at a later date. 
+
+.. image:: /demo/demo1.png
+    :align: center
+
+.. image:: /demo/demo2.png
+    :align: center
+
+.. image:: /demo/demo3.png
+    :align: center
 
 Configuration
 ------------------
