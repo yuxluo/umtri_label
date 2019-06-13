@@ -1,3 +1,7 @@
+.. role:: red
+
+This text is :red:`colored red` and so is :red:`this`
+
 UMTRI Image Annotation Tool
 ========
 
@@ -11,20 +15,15 @@ UMTRI Image Annotation Tool
     :width: 200px
     :align: center
 
-LabelImg is a graphical image annotation tool.
+UMTRI Image Annotation Tool is adapted from LabelImg and is being developed and maintained by Shaun Luo. Special thanks to Tzutalin for his initial work. 
 
-It is written in Python and uses Qt for its graphical interface.
-
+The UMTRI IAT is written in Python and uses PyQt5 for its GUI.
 Annotations are saved as XML files in PASCAL VOC format, the format used
 by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO format
 
-.. image:: https://raw.githubusercontent.com/tzutalin/labelImg/master/demo/demo3.jpg
-     :alt: Demo Image
+ATTENTION
+------------------
 
-.. image:: https://raw.githubusercontent.com/tzutalin/labelImg/master/demo/demo.jpg
-     :alt: Demo Image
-
-`Watch a demo video <https://youtu.be/p0nR2YsCY_U>`__
 
 Installation
 ------------------
