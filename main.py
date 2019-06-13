@@ -104,7 +104,10 @@ class MainWindow(QMainWindow, WindowMixin):
         self.dirty = False
 
         self.wen_jian_min = None
+        os.chdir(os.path.dirname(os.path.realpath(__file__)))
+        os.system('mkdir data')
         self.lu_jing = os.path.dirname(os.path.realpath(__file__)) + '/data/'
+        
 
         self._noSelectionSlot = False
         self._beginner = True
