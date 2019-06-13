@@ -18,13 +18,13 @@ The UMTRI IAT is written in Python and uses PyQt5 for its GUI.
 Annotations are saved as XML files in PASCAL VOC format, the format used
 by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO format
 
+.. image:: /demo/demo3.png
+    :align: center
 
 ATTENTION
 ------------------
 Only Ubuntu, Debian and Deepin are officially supported at this moment. Binaries for macOS and Windows is scheduled to be released at a later date. 
 
-.. image:: /demo/demo3.png
-    :align: center
 
 Configuration
 ------------------
