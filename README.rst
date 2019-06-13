@@ -132,10 +132,9 @@ Alpha 0.1
 ~~~~~~~
 • This ReadMe page
 • logo and title bar
-• logo and title bar
 • Disclaimer
 • Authentication
-• Custom file server 
+• Remote file server 
 • Modern and consistent icons
 • Progress bar
 • Retrieve function
