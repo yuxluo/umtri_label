@@ -1,6 +1,3 @@
-.. role:: red
-
-This text is :red:`colored red` and so is :red:`this`
 
 UMTRI Image Annotation Tool
 ========
@@ -23,14 +20,26 @@ by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO for
 
 ATTENTION
 ------------------
+Only Ubuntu, Debian and Deepin are officially supported at this moment. Binaries for macOS and Windows is scheduled to be released at a later date. 
 
-
-Installation
+Configuration
 ------------------
+The UMTRI Image Annotation Tool requires two components to work properly -- a server and a client
 
-
-Build from source
+Server
 ~~~~~~~~~~~~~~~~~
+The server hosts the data sets to be labeled. Server infomation is entered during the client's startup. 
+
+The server must support SSH and SCP. 
+
+The server must contain a file called 'predefined_classes.txt' at the root directory. This text file contains predefined labels that the client will fetch. 
+
+The server must also contain two folders 'labeled' and 'unlabeled'
+
+The .zip files of the data sets are placed in the unlabeled folder. 
+
+The .zip files must be a folder of the same name when inflated and contains supported image files (jpg, jpeg, png） within this inflated folders.
+
 
 Linux/Ubuntu/Mac requires at least `Python
 2.6 <https://www.python.org/getit/>`__ and has been tested with `PyQt
