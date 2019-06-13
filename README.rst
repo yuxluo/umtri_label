@@ -23,12 +23,6 @@ ATTENTION
 ------------------
 Only Ubuntu, Debian and Deepin are officially supported at this moment. Binaries for macOS and Windows is scheduled to be released at a later date. 
 
-.. image:: /demo/demo1.png
-    :align: center
-
-.. image:: /demo/demo2.png
-    :align: center
-
 .. image:: /demo/demo3.png
     :align: center
 
