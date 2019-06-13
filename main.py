@@ -541,14 +541,14 @@ class MainWindow(QMainWindow, WindowMixin):
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(HOST, username=USERNAME, password=PASSWORD)
         except:
-            alert_box = QMessageBox.warning(self, 'Request Failed Successfully', "The action was not performed correctly because: \n\nThe file server appears to be offline.", QMessageBox.Ok)
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "The action was not performed correctly because: \n\nThe file server appears to be offline.", QMessageBox.Ok)
             return
 
         # get the name of the first file
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('cd unlabeled/; ls | head -n 1') 
 
         if ssh_stderr.readlines() != []:
-            alert_box = QMessageBox.warning(self, 'Request Failed Successfully', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
             return
 
         pending_retrieval = str()
@@ -559,14 +559,14 @@ class MainWindow(QMainWindow, WindowMixin):
                 else:
                     break
         except:
-            alert_box = QMessageBox.warning(self, 'Request Failed Successfully', "The action was not performed correctly because: \n\nThe unlabeled folder appears to be empty on the server.", QMessageBox.Ok)
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "The action was not performed correctly because: \n\nThe unlabeled folder appears to be empty on the server.", QMessageBox.Ok)
             return
 
         # move top file to labeled folder
         mov_command = 'mv unlabeled/'+pending_retrieval+' labeled/'
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(mov_command)
         if ssh_stderr.readlines() != []:
-            alert_box = QMessageBox.warning(self, 'Request Failed Successfully', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
             return
 
         # get data and label from server through scp
@@ -577,7 +577,7 @@ class MainWindow(QMainWindow, WindowMixin):
             scp.get('~/predefined_classes.txt', data_folder_path)
             scp.get('~/labeled/' + pending_retrieval, data_folder_path)
         except:
-            alert_box = QMessageBox.warning(self, 'Request Failed Successfully', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
             return
         
         # unpack pictures and remove zip
