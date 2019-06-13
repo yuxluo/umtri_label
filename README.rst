@@ -43,14 +43,12 @@ The Server
 
 The Client
 ~~~~~~~~~~~~~~~~~
-• Ubuntu/Debian/Deepin requires python3 or above and PyQt5
-
 • Clone this repo.
 .. code:: shell
 
     git clone https://github.com/yuxluo/umtri_label.git
 
-• Install prerequisites (including pip3, pyqt5, pyqt5-dev-tools, lxml, paramiko, scp. This action may require root previlege)
+• Install prerequisites (including pip3, pyqt5, pyqt5-dev-tools, lxml, paramiko, scp. This action may require root privilege)
 .. code:: shell
 
     ./install.sh
