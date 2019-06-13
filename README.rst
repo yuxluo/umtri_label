@@ -133,16 +133,16 @@ Alpha 0.1
 • Modern and consistent icons
 • Progress bar
 • Retrieve function
-    move .zip to labeled 
-    download .zip from server
-    download predefined_classes
-    unzip
-    load folder and predefined_classes
+• Auto move .zip to labeled 
+• Auto download .zip from server
+• Auto download predefined_classes
+• Auto unzip
+• Auto load folder and predefined_classes
 • Autosave when click next and Submit
 • Submit function
-    compress labels into zip 
-    upload labels to server 
-    local clean up 
+• Auto compress labels into zip 
+• Auto upload labels to server 
+• Auto local clean up 
 
 
 Future Features
