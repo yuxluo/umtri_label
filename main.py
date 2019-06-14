@@ -541,14 +541,14 @@ class MainWindow(QMainWindow, WindowMixin):
             ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             ssh.connect(HOST, username=USERNAME, password=PASSWORD)
         except:
-            alert_box = QMessageBox.warning(self, 'Request Incomplete', "The action was not performed correctly because: \n\nThe file server appears to be offline.", QMessageBox.Ok)
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "This action was not performed correctly because: \n\nThe file server appears to be offline.", QMessageBox.Ok)
             return
 
         # get the name of the first file
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command('cd unlabeled/; ls | head -n 1') 
 
         if ssh_stderr.readlines() != []:
-            alert_box = QMessageBox.warning(self, 'Request Incomplete', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "This action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
             return
 
         pending_retrieval = str()
@@ -559,14 +559,14 @@ class MainWindow(QMainWindow, WindowMixin):
                 else:
                     break
         except:
-            alert_box = QMessageBox.warning(self, 'Request Incomplete', "The action was not performed correctly because: \n\nThe unlabeled folder appears to be empty on the server.", QMessageBox.Ok)
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "This action was not performed correctly because: \n\nThe unlabeled folder appears to be empty on the server.", QMessageBox.Ok)
             return
 
         # move top file to labeled folder
         mov_command = 'mv unlabeled/'+pending_retrieval+' labeled/'
         ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command(mov_command)
         if ssh_stderr.readlines() != []:
-            alert_box = QMessageBox.warning(self, 'Request Incomplete', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "This action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
             return
 
         # get data and label from server through scp
@@ -577,7 +577,7 @@ class MainWindow(QMainWindow, WindowMixin):
             scp.get('~/predefined_classes.txt', data_folder_path)
             scp.get('~/labeled/' + pending_retrieval, data_folder_path)
         except:
-            alert_box = QMessageBox.warning(self, 'Request Incomplete', "The action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "This action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
             return
         
         # unpack pictures and remove zip
@@ -614,10 +614,28 @@ class MainWindow(QMainWindow, WindowMixin):
         os.system(zip_command)
 
         #do upload stuff here
+        try:
+            ssh = paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(HOST, username=USERNAME, password=PASSWORD)
+        except:
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "This action was not performed correctly because: \n\nThe file server appears to be offline.", QMessageBox.Ok)
+            return
 
-        #clean up
+        try:
+            scp = SCPClient(ssh.get_transport())
+            scp.put(self.wen_jian_min + '_labels.zip', remote_path = '~/labels')
+        except:
+            alert_box = QMessageBox.warning(self, 'Request Incomplete', "This action was not performed correctly because: \n\nThe server has not been set up correctly.", QMessageBox.Ok)
+            return
+
+        # clean up
+        # It's your boi Fat Man and Little Boy coming to clean up your rubbish
         os.system('rm -rf *')
         os.system('rm *')
+
+        result = QMessageBox.information(self, 'Request Completed', "Your labels have been submitted successfully", QMessageBox.Ok)
+
         
 
     def keyReleaseEvent(self, event):
