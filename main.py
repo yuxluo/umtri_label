@@ -1431,6 +1431,8 @@ class MainWindow(QMainWindow, WindowMixin):
             currIndex = self.mImgList.index(self.filePath)
             if currIndex + 1 < len(self.mImgList):
                 filename = self.mImgList[currIndex + 1]
+            else:
+                result = QMessageBox.information(self, 'Request Incomplete', "This action was not performed successfully because:\n\nYou've reached the end of the data set. Click submit to upload your labels", QMessageBox.Ok)
 
         if filename:
             self.loadFile(filename)
