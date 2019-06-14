@@ -40,7 +40,7 @@ The Server
 
 • The server must contain a file called 'predefined_classes.txt' at the root directory. This text file contains predefined labels that the client will fetch. 
 
-• The server must also contain two folders 'labeled' and 'unlabeled'
+• The server must also contain three folders 'labeled', 'unlabeled' and 'labels'.
 
 • The .zip files of the data sets are placed in the unlabeled folder. 
 
