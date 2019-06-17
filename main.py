@@ -9,6 +9,7 @@ import sys
 import subprocess
 import time
 import paramiko
+from copy import deepcopy
 from scp import SCPClient
 
 from functools import partial
@@ -52,6 +53,8 @@ __appname__ = 'UMTRI Image Annotation Tool'
 HOST = '54.39.151.226'
 USERNAME='root'
 PASSWORD='5dLcV8TQ'
+CREATEING_HIERARCHY=False
+PARENT_NAME=''
 
 
 class WindowMixin(object):
@@ -317,7 +320,6 @@ class MainWindow(QMainWindow, WindowMixin):
                       'Ctrl+A', 'add', getStr('addPartDetail'),
                       enabled=False)
         
-        
 
         self.editButton.setDefaultAction(edit)
 
@@ -529,6 +531,18 @@ class MainWindow(QMainWindow, WindowMixin):
 
     def addPart(self):
         print('add_part called')
+        global CREATEING_HIERARCHY
+        CREATEING_HIERARCHY=True
+        # get the parent item 
+        if not self.canvas.editing():
+            return
+        item = self.currentItem()
+        if not item:
+            return
+        global PARENT_NAME
+        PARENT_NAME = item.text()
+        self.createShape()
+
 
     def progress(self, filename, size, sent):
         progress = float(sent)/float(size) * 100
@@ -1011,17 +1025,32 @@ class MainWindow(QMainWindow, WindowMixin):
 
         position MUST be in global coordinates.
         """
+        global CREATEING_HIERARCHY
+        
         if not self.useDefaultLabelCheckbox.isChecked() or not self.defaultLabelTextLine.text():
             if len(self.labelHist) > 0:
-                self.labelDialog = LabelDialog(
-                    parent=self, listItem=self.labelHist)
+                if CREATEING_HIERARCHY:
+                    list_copy = deepcopy(self.labelHist)
+                    for i in range(len(list_copy)):
+                        list_copy[i] = PARENT_NAME + ' の ' + list_copy[i]
+                    self.labelDialog = LabelDialog(
+                        parent=self, listItem=list_copy)
+                else:
+                    self.labelDialog = LabelDialog(
+                        parent=self, listItem=self.labelHist)
 
             # Sync single class mode from PR#106
             if self.singleClassMode.isChecked() and self.lastLabel:
                 text = self.lastLabel
             else:
-                text = self.labelDialog.popUp(text=self.prevLabelText)
-                self.lastLabel = text
+                if CREATEING_HIERARCHY:
+                    print('Add Hierarchy called')
+                    text = self.labelDialog.popUp2(text=PARENT_NAME + ' の ')
+                    self.lastLabel = text
+                    CREATEING_HIERARCHY = False
+                else:
+                    text = self.labelDialog.popUp(text=self.prevLabelText)
+                    self.lastLabel = text
         else:
             text = self.defaultLabelTextLine.text()
 

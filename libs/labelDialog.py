@@ -65,7 +65,15 @@ class LabelDialog(QDialog):
     def popUp(self, text='', move=True):
         self.edit.setText(text)
         self.edit.setSelection(0, len(text))
-        self.edit.setFocus(Qt.PopupFocusReason)
+        self.edit.setFocus(Qt.PopupFocusReason)        
+        if move:
+            self.move(QCursor.pos())
+        return self.edit.text() if self.exec_() else None
+
+    def popUp2(self, text='', move=True):
+        print('popup2')
+        self.edit.setText(text)
+        self.edit.setFocus()
         if move:
             self.move(QCursor.pos())
         return self.edit.text() if self.exec_() else None
