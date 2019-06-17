@@ -30,6 +30,7 @@
 <file alias="zoom-in">resources/icons/zoom-in.png</file>
 <file alias="zoom-out">resources/icons/zoom-out.png</file>
 <file alias="delete">resources/icons/cancel.png</file>
+<file alias="add">resources/icons/add.png</file>
 <file alias="next">resources/icons/next.png</file>
 <file alias="prev">resources/icons/prev.png</file>
 <file alias="resetall">resources/icons/resetall.png</file>

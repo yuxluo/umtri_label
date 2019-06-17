@@ -79,7 +79,7 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None, defaultPrefdefClassFile=None, defaultSaveDir=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
-        self.init_prompt()
+        # self.init_prompt()
         # Load setting in the main thread
         self.settings = Settings()
         self.settings.load()
@@ -312,6 +312,13 @@ class MainWindow(QMainWindow, WindowMixin):
         edit = action(getStr('editLabel'), self.editLabel,
                       'Ctrl+E', 'edit', getStr('editLabelDetail'),
                       enabled=False)
+
+        add_part = action(getStr('addPart'), self.addPart,
+                      'Ctrl+A', 'add', getStr('addPartDetail'),
+                      enabled=False)
+        
+        
+
         self.editButton.setDefaultAction(edit)
 
         shapeLineColor = action(getStr('shapeLineColor'), self.chshapeLineColor,
@@ -327,7 +334,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
         # Lavel list context menu.
         labelMenu = QMenu()
-        addActions(labelMenu, (edit, delete))
+        addActions(labelMenu, (edit, delete, add_part))
         self.labelList.setContextMenuPolicy(Qt.CustomContextMenu)
         self.labelList.customContextMenuRequested.connect(
             self.popLabelListMenu)
@@ -341,7 +348,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
         # Store actions for further handling.
         self.actions = struct(save=save, save_format=save_format, saveAs=saveAs, open=open, close=close, resetAll = resetAll,
-                              lineColor=color1, create=create, delete=delete, edit=edit, copy=copy,
+                              lineColor=color1, create=create, delete=delete, add_part=add_part, edit=edit, copy=copy,
                               createMode=createMode, editMode=editMode, advancedMode=advancedMode,
                               shapeLineColor=shapeLineColor, shapeFillColor=shapeFillColor,
                               zoom=zoom, zoomIn=zoomIn, zoomOut=zoomOut, zoomOrg=zoomOrg,
@@ -494,8 +501,8 @@ class MainWindow(QMainWindow, WindowMixin):
             self.openDirDialog(dirpath=self.filePath)
 
     def init_prompt(self):
-        alert_box = QMessageBox.question(self, '⚠⚠ 免責聲明 :::: DISCLAIMER ⚠⚠', "The UMTRI Image Annotation Tool may or may not be stealing intellectual properties for the Chinese government.\n\nClick 'Yes' to continue at your own risk:", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        # alert_box = QMessageBox.question(self, '⚠⚠ 免責聲明 :::: DISCLAIMER ⚠⚠', "The UMTRI Image Annotation Tool is provided by Shaun Luo as is and with all faults. Shaun Luo makes no representations or warranties of any kind concerning the stability, security, lack of viruses, inaccuracies, typographical errors, or other harmful components of this software. You are solely responsible for the protection of your OS and backup of your data. Shaun Luo will not be liable for any damages you may suffer in connection with using, modifying, or distributing this software.\n\nClick 'Yes' to contiune at your own risk:", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        # alert_box = QMessageBox.question(self, '⚠⚠ 免責聲明 :::: DISCLAIMER ⚠⚠', "The UMTRI Image Annotation Tool may or may not be stealing intellectual properties for the Chinese government.\n\nClick 'Yes' to continue at your own risk:", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        alert_box = QMessageBox.question(self, '⚠⚠ 免責聲明 :::: DISCLAIMER ⚠⚠', "The UMTRI Image Annotation Tool is provided by Shaun Luo as is and with all faults. Shaun Luo makes no representations or warranties of any kind concerning the stability, security, lack of viruses, inaccuracies, typographical errors, or other harmful components of this software. You are solely responsible for the protection of your OS and backup of your data. Shaun Luo will not be liable for any damages you may suffer in connection with using, modifying, or distributing this software.\n\nClick 'Yes' to contiune at your own risk:", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if alert_box == QMessageBox.Yes:
             print('Yes clicked.')
         else:
@@ -519,7 +526,9 @@ class MainWindow(QMainWindow, WindowMixin):
             USERNAME = server_info.split()[1]
             PASSWORD = server_info.split()[2]
 
-    
+
+    def addPart(self):
+        print('add_part called')
 
     def progress(self, filename, size, sent):
         progress = float(sent)/float(size) * 100
@@ -879,6 +888,7 @@ class MainWindow(QMainWindow, WindowMixin):
             else:
                 self.labelList.clearSelection()
         self.actions.delete.setEnabled(selected)
+        self.actions.add_part.setEnabled(selected)
         self.actions.copy.setEnabled(selected)
         self.actions.edit.setEnabled(selected)
         self.actions.shapeLineColor.setEnabled(selected)
