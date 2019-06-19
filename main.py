@@ -51,10 +51,12 @@ from libs.hashableQListWidgetItem import HashableQListWidgetItem
 
 __appname__ = 'UMTRI Image Annotation Tool'
 HOST = '54.39.151.226'
-USERNAME='root'
-PASSWORD='5dLcV8TQ'
-CREATEING_HIERARCHY=False
-PARENT_NAME=''
+USERNAME = 'root'
+PASSWORD = '5dLcV8TQ'
+CREATEING_HIERARCHY = False
+PARENT_NAME = ''
+PARENT_ID = 0
+GLOBAL_ID = 0
 
 
 class WindowMixin(object):
@@ -541,6 +543,9 @@ class MainWindow(QMainWindow, WindowMixin):
             return
         global PARENT_NAME
         PARENT_NAME = item.text()
+
+        PARENT_ID = self.itemsToShapes[item].id
+        
         self.createShape()
 
 
@@ -1026,10 +1031,13 @@ class MainWindow(QMainWindow, WindowMixin):
         position MUST be in global coordinates.
         """
         global CREATEING_HIERARCHY
-        
+        adding_child = False
+        adding_child = CREATEING_HIERARCHY
+        CREATEING_HIERARCHY = False
+
         if not self.useDefaultLabelCheckbox.isChecked() or not self.defaultLabelTextLine.text():
             if len(self.labelHist) > 0:
-                if CREATEING_HIERARCHY:
+                if adding_child:
                     list_copy = deepcopy(self.labelHist)
                     for i in range(len(list_copy)):
                         list_copy[i] = PARENT_NAME + ' の ' + list_copy[i]
@@ -1043,11 +1051,11 @@ class MainWindow(QMainWindow, WindowMixin):
             if self.singleClassMode.isChecked() and self.lastLabel:
                 text = self.lastLabel
             else:
-                if CREATEING_HIERARCHY:
+                if adding_child:
                     print('Add Hierarchy called')
                     text = self.labelDialog.popUp2(text=PARENT_NAME + ' の ')
                     self.lastLabel = text
-                    CREATEING_HIERARCHY = False
+                    
                 else:
                     text = self.labelDialog.popUp(text=self.prevLabelText)
                     self.lastLabel = text
@@ -1059,7 +1067,12 @@ class MainWindow(QMainWindow, WindowMixin):
         if text is not None:
             self.prevLabelText = text
             generate_color = generateColorByText(text)
-            shape = self.canvas.setLastLabel(text, generate_color, generate_color)
+
+            global GLOBAL_ID
+            shape = self.canvas.setLastLabel(text, generate_color, generate_color, GLOBAL_ID, PARENT_ID, adding_child)
+            GLOBAL_ID += 1
+
+
             self.addLabel(shape)
             if self.beginner():  # Switch to edit mode.
                 self.canvas.setEditing(True)

@@ -12,6 +12,7 @@ except ImportError:
 from libs.shape import Shape
 from libs.utils import distance
 
+
 CURSOR_DEFAULT = Qt.ArrowCursor
 CURSOR_POINT = Qt.PointingHandCursor
 CURSOR_DRAW = Qt.CrossCursor
@@ -657,7 +658,7 @@ class Canvas(QWidget):
         points = [p1+p2 for p1, p2 in zip(self.selectedShape.points, [step]*4)]
         return True in map(self.outOfPixmap, points)
 
-    def setLastLabel(self, text, line_color  = None, fill_color = None):
+    def setLastLabel(self, text, line_color = None, fill_color = None, id = -1, parent_id = -1, adding_child = False):
         assert text
         self.shapes[-1].label = text
         if line_color:
@@ -665,8 +666,19 @@ class Canvas(QWidget):
 
         if fill_color:
             self.shapes[-1].fill_color = fill_color
+        
+        # Establishing relationship hierarchy
+        self.shapes[-1].id = id
+        if adding_child: 
+            self.shapes[-1].parents.append(parent_id)
+            self.shapes[self.find_parent_index(parent_id)].children.append(id)
 
         return self.shapes[-1]
+
+    def find_parent_index(self, parent_id):
+        for index in range(len(self.shapes)):
+            if self.shapes[index].id == parent_id:
+                return index
 
     def undoLastLine(self):
         assert self.shapes
