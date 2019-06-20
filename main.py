@@ -57,6 +57,7 @@ CREATEING_HIERARCHY = False
 PARENT_NAME = ''
 PARENT_ID = 0
 GLOBAL_ID = 0
+CURR_ROW = -1
 
 
 class WindowMixin(object):
@@ -542,8 +543,9 @@ class MainWindow(QMainWindow, WindowMixin):
         if not item:
             return
         global PARENT_NAME
+        global CURR_ROW
         PARENT_NAME = item.text()
-
+        CURR_ROW = self.labelList.currentRow()
         PARENT_ID = self.itemsToShapes[item].id
         
         self.createShape()
@@ -921,7 +923,15 @@ class MainWindow(QMainWindow, WindowMixin):
         item.setBackground(generateColorByText(shape.label))
         self.itemsToShapes[item] = shape
         self.shapesToItems[shape] = item
-        self.labelList.addItem(item)
+
+        global CURR_ROW
+        print(CURR_ROW)
+        if CURR_ROW != -1:
+            self.labelList.insertItem(CURR_ROW + 1, item)
+        else:
+            self.labelList.addItem(item)
+        CURR_ROW = -1
+
         for action in self.actions.onShapesPresent:
             action.setEnabled(True)
 
