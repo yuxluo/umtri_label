@@ -986,7 +986,9 @@ class MainWindow(QMainWindow, WindowMixin):
                         fill_color=s.fill_color.getRgb(),
                         points=[(p.x(), p.y()) for p in s.points],
                        # add chris
-                        difficult = s.difficult)
+                        difficult = s.difficult,
+                        parents = s.parents,
+                        children = s.children)
 
         shapes = [format_shape(shape) for shape in self.canvas.shapes]
         # Can add differrent annotation formats here
@@ -1634,7 +1636,8 @@ class MainWindow(QMainWindow, WindowMixin):
                     if self.labelHist is None:
                         self.labelHist = [line]
                     else:
-                        self.labelHist.append(line)
+                        if line not in self.labelHist:
+                            self.labelHist.append(line)
 
     def loadPascalXMLByFilename(self, xmlPath):
         if self.filePath is None:
