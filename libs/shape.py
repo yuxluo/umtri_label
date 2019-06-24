@@ -43,7 +43,7 @@ class Shape(object):
         self.points = []
         self.parents = []
         self.children = []
-        self.id = 0
+        self.self_id = 0
         self.fill = False
         self.selected = False
         self.difficult = difficult

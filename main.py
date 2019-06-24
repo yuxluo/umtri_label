@@ -55,7 +55,7 @@ USERNAME = 'root'
 PASSWORD = '5dLcV8TQ'
 CREATEING_HIERARCHY = False
 PARENT_NAME = ''
-PARENT_ID = 0
+PARENT_ID = -99
 GLOBAL_ID = 0
 CURR_ROW = -1
 
@@ -546,8 +546,8 @@ class MainWindow(QMainWindow, WindowMixin):
         global CURR_ROW
         PARENT_NAME = item.text()
         CURR_ROW = self.labelList.currentRow()
-        PARENT_ID = self.itemsToShapes[item].id
-        
+        PARENT_ID = self.itemsToShapes[item].self_id
+        print(PARENT_ID)
         self.createShape()
 
 
@@ -988,6 +988,7 @@ class MainWindow(QMainWindow, WindowMixin):
                        # add chris
                         difficult = s.difficult,
                         parents = s.parents,
+                        self_id = s.self_id,
                         children = s.children)
 
         shapes = [format_shape(shape) for shape in self.canvas.shapes]
@@ -1081,6 +1082,9 @@ class MainWindow(QMainWindow, WindowMixin):
             generate_color = generateColorByText(text)
 
             global GLOBAL_ID
+            global PARENT_ID
+            print(PARENT_ID)
+            print(GLOBAL_ID)
             shape = self.canvas.setLastLabel(text, generate_color, generate_color, GLOBAL_ID, PARENT_ID, adding_child)
             GLOBAL_ID += 1
 

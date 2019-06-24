@@ -77,20 +77,45 @@ class PascalVocWriter:
         segmented.text = '0'
         return top
 
-    def addBndBox(self, xmin, ymin, xmax, ymax, name, difficult, parents, children):
+    def addBndBox(self, xmin, ymin, xmax, ymax, name, difficult, parents, children, self_id):
         bndbox = {'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax}
         bndbox['name'] = name
         bndbox['difficult'] = difficult
         bndbox['parents'] = parents
         bndbox['children'] = children
+        bndbox['self_id'] = self_id
         self.boxlist.append(bndbox)
 
     def appendObjects(self, top):
         for each_object in self.boxlist:
             object_item = SubElement(top, 'object')
+
+            object_id = SubElement(object_item, 'object_id')
+            object_id.text = str(each_object['self_id'])
+
             name = SubElement(object_item, 'name')
-            parents = SubElement(object_item, 'parents')
-            name.text = ustr(each_object['name'])
+            real_name = ustr(each_object['name'])
+
+            name.text = str()
+            for letter in real_name:
+                if letter != ' ':
+                    name.text += letter
+                else:
+                    name.text = str()
+
+            if len(each_object['parents']) != 0:
+                parents = SubElement(object_item, 'has_parents')
+                for each_id in each_object['parents']:
+                     parent = SubElement(parents, 'parent')
+                     parent.text = str(each_id)
+
+
+            if len(each_object['children']) != 0:
+                children = SubElement(object_item, 'has_children')
+                for each_id in each_object['children']:
+                    child = SubElement(children, 'child')
+                    child.text = str(each_id)
+
             pose = SubElement(object_item, 'pose')
             pose.text = "Unspecified"
             truncated = SubElement(object_item, 'truncated')
