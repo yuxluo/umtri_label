@@ -87,6 +87,11 @@ class PascalVocWriter:
         self.boxlist.append(bndbox)
 
     def appendObjects(self, top):
+
+        all_ids = []
+        for each_object in self.boxlist:
+            all_ids.append(each_object['self_id'])
+
         for each_object in self.boxlist:
             object_item = SubElement(top, 'object')
 
@@ -106,15 +111,17 @@ class PascalVocWriter:
             if len(each_object['parents']) != 0:
                 parents = SubElement(object_item, 'has_parents')
                 for each_id in each_object['parents']:
-                     parent = SubElement(parents, 'parent')
-                     parent.text = str(each_id)
+                    if each_id in all_ids:
+                        parent = SubElement(parents, 'parent')
+                        parent.text = str(each_id)
 
 
             if len(each_object['children']) != 0:
                 children = SubElement(object_item, 'has_children')
                 for each_id in each_object['children']:
-                    child = SubElement(children, 'child')
-                    child.text = str(each_id)
+                    if each_id in all_ids:
+                        child = SubElement(children, 'child')
+                        child.text = str(each_id)
 
             pose = SubElement(object_item, 'pose')
             pose.text = "Unspecified"

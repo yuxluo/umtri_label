@@ -71,7 +71,6 @@ class LabelDialog(QDialog):
         return self.edit.text() if self.exec_() else None
 
     def popUp2(self, text='', move=True):
-        print('popup2')
         self.edit.setText(text)
         self.edit.setFocus()
         if move:

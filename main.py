@@ -533,7 +533,6 @@ class MainWindow(QMainWindow, WindowMixin):
 
 
     def addPart(self):
-        print('add_part called')
         global CREATEING_HIERARCHY
         CREATEING_HIERARCHY=True
         # get the parent item 
@@ -544,10 +543,10 @@ class MainWindow(QMainWindow, WindowMixin):
             return
         global PARENT_NAME
         global CURR_ROW
+        global PARENT_ID
         PARENT_NAME = item.text()
         CURR_ROW = self.labelList.currentRow()
         PARENT_ID = self.itemsToShapes[item].self_id
-        print(PARENT_ID)
         self.createShape()
 
 
@@ -925,7 +924,6 @@ class MainWindow(QMainWindow, WindowMixin):
         self.shapesToItems[shape] = item
 
         global CURR_ROW
-        print(CURR_ROW)
         if CURR_ROW != -1:
             self.labelList.insertItem(CURR_ROW + 1, item)
         else:
@@ -1065,7 +1063,6 @@ class MainWindow(QMainWindow, WindowMixin):
                 text = self.lastLabel
             else:
                 if adding_child:
-                    print('Add Hierarchy called')
                     text = self.labelDialog.popUp2(text=PARENT_NAME + ' の ')
                     self.lastLabel = text
                     
@@ -1083,8 +1080,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
             global GLOBAL_ID
             global PARENT_ID
-            print(PARENT_ID)
-            print(GLOBAL_ID)
+
             shape = self.canvas.setLastLabel(text, generate_color, generate_color, GLOBAL_ID, PARENT_ID, adding_child)
             GLOBAL_ID += 1
 
