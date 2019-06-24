@@ -155,10 +155,17 @@ Alpha 0.1
 • Auto local clean up 
 • Added preemptive checking in case unlabeled folder is empty or server unable to connect
 
+Alpha 0.2
+~~~~~~~
+• New UI function, right click on label to add component 
+• Auto-format & auto-fill in pop-up dialog
+• Ordered label list -> parent on top, immediate children below 
+• Modified data structure to allow ID and parent/child relation
+• Post-processing: reflect hierarchy when outputing in pascal_voc format .XML
 
 Future Features
 ~~~~~~~
-• Hierarchy
+• Able to read hierarchy from file
 • Occluded check box
 • Gesture labeling
 • single-file executable for macOS and Windows
