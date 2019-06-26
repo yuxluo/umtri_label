@@ -162,10 +162,10 @@ Alpha 0.2
 • Ordered label list -> parent on top, immediate children below 
 • Modified data structure to allow ID and parent/child relation
 • Post-processing: reflect hierarchy when outputing in pascal_voc format .XML
+• Can read hierarchy from file into program
 
 Future Features
 ~~~~~~~
-• Able to read hierarchy from file
 • Occluded check box
 • Gesture labeling
 • single-file executable for macOS and Windows
