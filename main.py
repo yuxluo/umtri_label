@@ -944,8 +944,14 @@ class MainWindow(QMainWindow, WindowMixin):
 
     def loadLabels(self, shapes):
         s = []
-        for label, points, line_color, fill_color, difficult in shapes:
-            shape = Shape(label=label)
+        for label, points, parents, children, self_id, line_color, fill_color, difficult in shapes:
+            if parents == []:
+                shape = Shape(label=label)
+            else:
+                parent_id = parents[0]
+                for item in shapes:
+                    if item[4] == parent_id:
+                        shape = Shape(label = item[0] + ' の ' + label)
             for x, y in points:
 
                 # Ensure the labels are within the bounds of the image. If not, fix them.
@@ -955,6 +961,9 @@ class MainWindow(QMainWindow, WindowMixin):
 
                 shape.addPoint(QPointF(x, y))
             shape.difficult = difficult
+            shape.self_id = self_id
+            shape.parents = parents
+            shape.children = children
             shape.close()
             s.append(shape)
 
