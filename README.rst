@@ -126,7 +126,9 @@ The difficult field is set to 1 indicates that the object has been annotated as 
 According to your deep neural network implementation, you can include or exclude difficult objects during training.
 
 **Hierarchy:**
+
 Right click on the label and select 'add component' to add a child to the selected object. 
+
 
 License
 ~~~~~~~
