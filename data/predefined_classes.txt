@@ -1,4 +1,3 @@
-face
-arm
-leg
-pedestrian
+traffic_sign
+school_bus
+traffic_light
