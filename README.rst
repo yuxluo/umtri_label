@@ -125,6 +125,9 @@ This is used when creating a dataset automatically, the user can then through al
 The difficult field is set to 1 indicates that the object has been annotated as "difficult", for example, an object which is clearly visible but difficult to recognize without substantial use of context.
 According to your deep neural network implementation, you can include or exclude difficult objects during training.
 
+**Hierarchy:**
+Right click on the label and select 'add component' to add a child to the selected object. 
+
 License
 ~~~~~~~
 `Free software: MIT license <https://github.com/tzutalin/labelImg/blob/master/LICENSE>`_
@@ -162,7 +165,7 @@ Alpha 0.2
 • Ordered label list -> parent on top, immediate children below 
 • Modified data structure to allow ID and parent/child relation
 • Post-processing: reflect hierarchy when outputing in pascal_voc format .XML
-• Can read hierarchy from file into program
+• Can read hierarchy from file into program while maintaining the correct odering
 
 Future Features
 ~~~~~~~
