@@ -21,6 +21,12 @@ by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO for
 .. image:: /demo/demo3.png
     :align: center
 
+.. image:: /demo/demo7.png
+    :align: center
+
+.. image:: /demo/demo6.png
+:align: center
+
 ATTENTION
 ------------------
 Only Linux(Ubuntu, Debian, Deepin) and macOS are officially supported at this moment. Binaries for macOS and Windows is scheduled to be released at a later date. 
