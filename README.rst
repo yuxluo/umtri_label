@@ -20,15 +20,24 @@ by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO for
 
 .. image:: /demo/demo3.png
     :align: center
-UMTRI IAT running on Lubuntu
+^UMTRI IAT running on Lubuntu
+
 
 .. image:: /demo/demo5.png
     :align: center
-UMTRI IAT running on Deepin
+^UMTRI IAT running on Deepin
+
+
+.. image:: /demo/demo8.png
+    :align: center
+^UMTRI IAT running on OSX Mojave
+
 
 .. image:: /demo/demo6.png
     :align: center
-UMTRI IAT running on OSX Mojave
+XML Output
+
+
 
 ATTENTION
 ------------------
