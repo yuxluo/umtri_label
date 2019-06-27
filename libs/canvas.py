@@ -673,6 +673,11 @@ class Canvas(QWidget):
             self.shapes[-1].parents.append(parent_id)
             self.shapes[self.find_parent_index(parent_id)].children.append(self_id)
 
+            for parent_index in range(len(self.shapes)):
+                if self.shapes[parent_index].self_id == parent_id:
+                    self.shapes.insert(parent_index + 1, self.shapes.pop(-1))
+                    return self.shapes[parent_index + 1]
+
         return self.shapes[-1]
 
     def find_parent_index(self, parent_id):

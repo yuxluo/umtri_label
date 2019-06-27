@@ -192,7 +192,6 @@ class PascalVocReader:
         except:
             pass
 
-
         xmin = int(float(bndbox.find('xmin').text))
         ymin = int(float(bndbox.find('ymin').text))
         xmax = int(float(bndbox.find('xmax').text))

@@ -85,7 +85,7 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None, defaultPrefdefClassFile=None, defaultSaveDir=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
-        # self.init_prompt()
+        self.init_prompt()
         # Load setting in the main thread
         self.settings = Settings()
         self.settings.load()
