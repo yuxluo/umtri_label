@@ -25,7 +25,7 @@ by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO for
     :align: center
 
 .. image:: /demo/demo6.png
-:align: center
+    :align: center
 
 ATTENTION
 ------------------
@@ -177,6 +177,6 @@ Alpha 0.2
 
 Future Features
 ~~~~~~~
-• Occluded check box
-• Gesture labeling
-• single-file executable for macOS and Windows
+• Tree structure
+• Behavior labeling across frames
+• ?
