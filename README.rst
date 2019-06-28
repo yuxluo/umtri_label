@@ -33,11 +33,6 @@ by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO for
 ^UMTRI IAT running on OSX Mojave
 
 
-.. image:: /demo/demo6.png
-    :align: center
-XML Output
-
-
 
 ATTENTION
 ------------------
