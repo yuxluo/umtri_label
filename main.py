@@ -48,16 +48,16 @@ from libs.yolo_io import YoloReader
 from libs.yolo_io import TXT_EXT
 from libs.ustr import ustr
 from libs.hashableQListWidgetItem import HashableQListWidgetItem
+from libs.hashableQTreeWidgetItem import hashableQTreeWidgetItem
 
 __appname__ = 'UMTRI Image Annotation Tool'
 HOST = '54.39.151.226'
 USERNAME = 'root'
 PASSWORD = '5dLcV8TQ'
 CREATEING_HIERARCHY = False
-PARENT_NAME = ''
 PARENT_ID = -99
 GLOBAL_ID = 0
-CURR_ROW = -1
+PARENT_ITEM = HashableQListWidgetItem()
 
 
 class WindowMixin(object):
@@ -85,7 +85,7 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None, defaultPrefdefClassFile=None, defaultSaveDir=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
-        self.init_prompt()
+        # self.init_prompt()
         # Load setting in the main thread
         self.settings = Settings()
         self.settings.load()
@@ -156,7 +156,9 @@ class MainWindow(QMainWindow, WindowMixin):
         listLayout.addWidget(useDefaultLabelContainer)
 
         # Create and add a widget for showing current label items
-        self.labelList = QListWidget()
+        # self.labelList = QListWidget()
+        self.labelList = QTreeWidget()
+        self.labelList.setHeaderLabel('Labels')
         labelListContainer = QWidget()
         labelListContainer.setLayout(listLayout)
         self.labelList.itemActivated.connect(self.labelSelectionChanged)
@@ -541,11 +543,9 @@ class MainWindow(QMainWindow, WindowMixin):
         item = self.currentItem()
         if not item:
             return
-        global PARENT_NAME
-        global CURR_ROW
         global PARENT_ID
-        PARENT_NAME = item.text()
-        CURR_ROW = self.labelList.currentRow()
+        global PARENT_ITEM
+        PARENT_ITEM = item
         PARENT_ID = self.itemsToShapes[item].self_id
         self.createShape()
 
@@ -813,6 +813,8 @@ class MainWindow(QMainWindow, WindowMixin):
         if not drawing and self.beginner():
             # Cancel creation.
             print('Cancel creation.')
+            global CREATEING_HIERARCHY
+            CREATEING_HIERARCHY = False
             self.canvas.setEditing(True)
             self.canvas.restoreCursor()
             self.actions.create.setEnabled(True)
@@ -856,15 +858,15 @@ class MainWindow(QMainWindow, WindowMixin):
         item = self.currentItem()
         if not item:
             return
-        text = self.labelDialog.popUp(item.text())
+        text = self.labelDialog.popUp(item.text(0))
         if text is not None:
-            item.setText(text)
-            item.setBackground(generateColorByText(text))
+            item.setText(0, text)
+            item.setBackground(0, generateColorByText(text))
             self.setDirty()
 
     # Tzutalin 20160906 : Add file list and dock to move faster
     def fileitemDoubleClicked(self, item=None):
-        currIndex = self.mImgList.index(ustr(item.text()))
+        currIndex = self.mImgList.index(ustr(item.text(0)))
         if currIndex < len(self.mImgList):
             filename = self.mImgList[currIndex]
             if filename:
@@ -916,19 +918,21 @@ class MainWindow(QMainWindow, WindowMixin):
 
     def addLabel(self, shape):
         shape.paintLabel = self.displayLabelOption.isChecked()
-        item = HashableQListWidgetItem(shape.label)
+        global CREATEING_HIERARCHY
+        item = HashableQListWidgetItem()
+        item.setText(0, shape.label)
         item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
-        item.setCheckState(Qt.Checked)
-        item.setBackground(generateColorByText(shape.label))
+        item.setCheckState(0, Qt.Checked)
+        item.setBackground(0, generateColorByText(shape.label))
         self.itemsToShapes[item] = shape
         self.shapesToItems[shape] = item
 
-        global CURR_ROW
-        if CURR_ROW != -1:
-            self.labelList.insertItem(CURR_ROW + 1, item)
+        if CREATEING_HIERARCHY:
+            PARENT_ITEM.addChild(item)
+            PARENT_ITEM.setExpanded(True)
         else:
-            self.labelList.addItem(item)
-        CURR_ROW = -1
+            self.labelList.addTopLevelItem(item)
+        CREATEING_HIERARCHY = False
 
         for action in self.actions.onShapesPresent:
             action.setEnabled(True)
@@ -938,9 +942,20 @@ class MainWindow(QMainWindow, WindowMixin):
             # print('rm empty label')
             return
         item = self.shapesToItems[shape]
-        self.labelList.takeItem(self.labelList.row(item))
+
+        while item.childCount() != 0:
+            child = item.child(0)
+            self.remLabel(self.itemsToShapes[child])
+
+        
+        self.canvas.delete_shape(shape)
+
         del self.shapesToItems[shape]
         del self.itemsToShapes[item]
+        root = self.labelList.invisibleRootItem()
+        (item.parent() or root).removeChild(item)
+
+    
 
     def loadLabels(self, shapes):
         s = []
@@ -1036,13 +1051,22 @@ class MainWindow(QMainWindow, WindowMixin):
 
     def labelItemChanged(self, item):
         shape = self.itemsToShapes[item]
-        label = item.text()
+        label = item.text(0)
         if label != shape.label:
-            shape.label = item.text()
+            shape.label = item.text(0)
             shape.line_color = generateColorByText(shape.label)
             self.setDirty()
         else:  # User probably changed item visibility
-            self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
+            self.canvas.setShapeVisible(shape, item.checkState(0) == Qt.Checked)
+            for i in range(item.childCount()):
+                self.recursive_change_visibility(item.child(i), item.checkState(0))
+            
+    def recursive_change_visibility(self, item, parent_check_state):
+        item.setCheckState(0, parent_check_state)
+        shape = self.itemsToShapes[item]
+        self.canvas.setShapeVisible(shape, parent_check_state)
+        for i in range(item.childCount()):
+            self.recursive_change_visibility(item.child(i), parent_check_state)
 
     # Callback functions:
     def newShape(self):
@@ -1051,19 +1075,9 @@ class MainWindow(QMainWindow, WindowMixin):
         position MUST be in global coordinates.
         """
         global CREATEING_HIERARCHY
-        adding_child = False
-        adding_child = CREATEING_HIERARCHY
-        CREATEING_HIERARCHY = False
 
         if not self.useDefaultLabelCheckbox.isChecked() or not self.defaultLabelTextLine.text():
             if len(self.labelHist) > 0:
-                if adding_child:
-                    list_copy = deepcopy(self.labelHist)
-                    for i in range(len(list_copy)):
-                        list_copy[i] = PARENT_NAME + ' の ' + list_copy[i]
-                    self.labelDialog = LabelDialog(
-                        parent=self, listItem=list_copy)
-                else:
                     self.labelDialog = LabelDialog(
                         parent=self, listItem=self.labelHist)
 
@@ -1071,11 +1085,6 @@ class MainWindow(QMainWindow, WindowMixin):
             if self.singleClassMode.isChecked() and self.lastLabel:
                 text = self.lastLabel
             else:
-                if adding_child:
-                    text = self.labelDialog.popUp2(text=PARENT_NAME + ' の ')
-                    self.lastLabel = text
-                    
-                else:
                     text = self.labelDialog.popUp(text=self.prevLabelText)
                     self.lastLabel = text
         else:
@@ -1090,7 +1099,7 @@ class MainWindow(QMainWindow, WindowMixin):
             global GLOBAL_ID
             global PARENT_ID
 
-            shape = self.canvas.setLastLabel(text, generate_color, generate_color, GLOBAL_ID, PARENT_ID, adding_child)
+            shape = self.canvas.setLastLabel(text, generate_color, generate_color, GLOBAL_ID, PARENT_ID, CREATEING_HIERARCHY)
             GLOBAL_ID += 1
 
 
@@ -1281,9 +1290,9 @@ class MainWindow(QMainWindow, WindowMixin):
             self.setWindowTitle(__appname__ + ' ' + filePath)
 
             # Default : select last item if there is at least one item
-            if self.labelList.count():
-                self.labelList.setCurrentItem(self.labelList.item(self.labelList.count()-1))
-                self.labelList.item(self.labelList.count()-1).setSelected(True)
+            # if self.labelList.count():
+            #     self.labelList.setCurrentItem(self.labelList.item(self.labelList.count()-1))
+            #     self.labelList.item(self.labelList.count()-1).setSelected(True)
 
             self.canvas.setFocus(True)
             return True

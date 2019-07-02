@@ -412,6 +412,12 @@ class Canvas(QWidget):
             self.update()
             return shape
 
+    def delete_shape(self, shape):
+        try:
+            self.shapes.remove(shape)
+        except:
+            return
+
     def copySelectedShape(self):
         if self.selectedShape:
             shape = self.selectedShape.copy()

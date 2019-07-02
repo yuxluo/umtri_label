@@ -1,5 +1,4 @@
-traffic_sign
-traffic_light
 school_bus
-car
-pedestrian
+traffic_light
+traffic_sign
+license_plate
