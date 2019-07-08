@@ -937,6 +937,7 @@ class MainWindow(QMainWindow, WindowMixin):
         for action in self.actions.onShapesPresent:
             action.setEnabled(True)
 
+
     def remLabel(self, shape):
         if shape is None:
             # print('rm empty label')
@@ -955,18 +956,37 @@ class MainWindow(QMainWindow, WindowMixin):
         root = self.labelList.invisibleRootItem()
         (item.parent() or root).removeChild(item)
 
+    def search_tree(self, id):
+        root = self.labelList.invisibleRootItem()
+        for child_index in range(root.childCount()):
+            if self.recursive_search_tree(root.child(child_index), id) == 0:
+                break
     
+    def recursive_search_tree(self, parent, id):
+        if self.itemsToShapes[parent].self_id == id:
+            global PARENT_ITEM 
+            PARENT_ITEM = parent
+            return 0
+        else:
+            for child_index in range(parent.childCount()):
+                if self.recursive_search_tree(parent.child(child_index), id) == 0:
+                    return 0
+
+        return -1
+
 
     def loadLabels(self, shapes):
         s = []
         for label, points, parents, children, self_id, line_color, fill_color, difficult in shapes:
-            if parents == []:
-                shape = Shape(label=label)
-            else:
+            shape = Shape(label=label)
+            if parents != []:
+                # find the parent node and add this as child
                 parent_id = parents[0]
-                for item in shapes:
-                    if item[4] == parent_id:
-                        shape = Shape(label = item[0] + ' の ' + label)
+                global CREATEING_HIERARCHY
+                CREATEING_HIERARCHY = True
+                self.search_tree(parent_id)
+
+            
             for x, y in points:
 
                 # Ensure the labels are within the bounds of the image. If not, fix them.
