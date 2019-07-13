@@ -1,4 +1,0 @@
-school_bus
-traffic_light
-traffic_sign
-license_plate
