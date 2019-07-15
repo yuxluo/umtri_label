@@ -32,6 +32,7 @@ by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO for
     :align: center
 ^UMTRI IAT running on OSX Mojave
 
+.. _VideoDemo: http://umtri.org/file/umtri_label_demo.mp4
 
 
 ATTENTION
