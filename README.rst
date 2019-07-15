@@ -191,6 +191,7 @@ Alpha 0.3
 • Recursive label check
 • Recursive delete 
 • Reconstruction of tree when loading label from file
+• Various bug fixes
 
 Future Features
 ~~~~~~~
