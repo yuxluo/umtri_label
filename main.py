@@ -85,7 +85,7 @@ class MainWindow(QMainWindow, WindowMixin):
     def __init__(self, defaultFilename=None, defaultPrefdefClassFile=None, defaultSaveDir=None):
         super(MainWindow, self).__init__()
         self.setWindowTitle(__appname__)
-        # self.init_prompt()
+        self.init_prompt()
         # Load setting in the main thread
         self.settings = Settings()
         self.settings.load()
@@ -1635,6 +1635,12 @@ class MainWindow(QMainWindow, WindowMixin):
             self.setDirty()
 
     def deleteSelectedShape(self):
+        if len(self.canvas.selectedShape.children) != 0:
+            alert_box = QMessageBox.question(self, '⚠⚠ ATTENTION ⚠⚠', "Removing this label will result in the removal of all its children. \n\nDo you wish to continue?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+            if alert_box == QMessageBox.Yes:
+                pass
+            else:
+                return
         self.remLabel(self.canvas.deleteSelected())
         self.setDirty()
         if self.noShapes():

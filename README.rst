@@ -182,8 +182,14 @@ Alpha 0.2
 • Post-processing: reflect hierarchy when outputing in pascal_voc format .XML
 • Can read hierarchy from file into program while maintaining the correct odering
 
+Alpha 0.3
+~~~~~~~
+• Moved from a list representation to a tree representation of labels
+• More intuitive hierarchy on the user interface 
+• Recursive label check
+• Recursive delete 
+• Reconstruction of tree when loading label from file
+
 Future Features
 ~~~~~~~
-• Tree structure
-• Behavior labeling across frames
 • ?
