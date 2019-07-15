@@ -33,7 +33,7 @@ by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO for
 ^UMTRI IAT running on OSX Mojave
 
 `Video Demo
-<http://umtri.org/file/umtri_label_demo.mp4/>`_.
+<http://umtri.org/file/umtri_label_demo.mp4>`_.
 
 
 ATTENTION
