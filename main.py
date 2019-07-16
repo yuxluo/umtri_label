@@ -52,8 +52,8 @@ from libs.hashableQTreeWidgetItem import hashableQTreeWidgetItem
 
 __appname__ = 'UMTRI Image Annotation Tool'
 HOST = 'umtri.org'
-USERNAME = 'label_dl'
-PASSWORD = 'goblue2901'
+USERNAME = 'test'
+PASSWORD = 'testest'
 CREATEING_HIERARCHY = False
 PARENT_ID = -99
 GLOBAL_ID = 0
