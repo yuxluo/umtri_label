@@ -14,7 +14,7 @@ UMTRI Image Annotation Tool
 
 UMTRI Image Annotation Tool is adapted from LabelImg and is being developed and maintained by Shaun Luo. Special thanks to Tzutalin for his initial work. 
 
-The UMTRI IAT is written in Python and uses PyQt5 for its GUI.
+The UMTRI IAT is written in Python and uses PyQt5 for its GUI. It allows users to create drag and create bounding boxes and label them. 
 Annotations are saved as XML files in PASCAL VOC format, the format used
 by `ImageNet <http://www.image-net.org/>`__.  Besides, it also supports YOLO format
 
