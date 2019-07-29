@@ -637,7 +637,12 @@ class MainWindow(QMainWindow, WindowMixin):
 
         # remove all images from the folder
         data_folder_path = self.lu_jing
-        os.chdir(data_folder_path + self.wen_jian_min)
+        try:
+            if self.wen_jian_min == None:
+                self.wen_jian_min = self.filePath.split('/')[-2]
+            os.chdir(data_folder_path + self.wen_jian_min)
+        except:
+            return
         os.system('rm *.jpeg')
         os.system('rm *.jpg')
         os.system('rm *.png')
